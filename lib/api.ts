@@ -1,15 +1,18 @@
 import * as cdk from "@aws-cdk/core";
 import * as lambda from "@aws-cdk/aws-lambda-nodejs";
 import { Runtime } from "@aws-cdk/aws-lambda";
+import * as s3 from "@aws-cdk/aws-s3";
 import * as path from "path";
 
-interface DocumentManagementAPIProps {}
+interface DocumentManagementAPIProps {
+  documentBucket: s3.IBucket;
+}
 
 export class DocumentManagementAPI extends cdk.Construct {
   constructor(
     scope: cdk.Construct,
     id: string,
-    props?: DocumentManagementAPIProps
+    props: DocumentManagementAPIProps
   ) {
     super(scope, id);
 
@@ -20,6 +23,9 @@ export class DocumentManagementAPI extends cdk.Construct {
         runtime: Runtime.NODEJS_12_X,
         entry: path.join(__dirname, "..", "api", "getDocuments", "index.ts"),
         handler: "getDocuments",
+        environment: {
+          DOCUMENTS_BUCKET_NAME: props.documentBucket.bucketName,
+        },
       }
     );
   }
