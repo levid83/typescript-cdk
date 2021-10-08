@@ -29,5 +29,15 @@ export class DocumentManagementAPI extends cdk.Construct {
         },
       }
     );
+
+    const bucketPermissions = new iam.PolicyStatement();
+    bucketPermissions.addResources(`${props.documentBucket.bucketArn}/*`);
+    bucketPermissions.addActions("s3:GetObject", "s3:PutObject");
+    getDocumentsFunction.addToRolePolicy(bucketPermissions);
+
+    const bucketContainerPermissions = new iam.PolicyStatement();
+    bucketContainerPermissions.addResources(props.documentBucket.bucketArn);
+    bucketContainerPermissions.addActions("s3:ListBucket");
+    getDocumentsFunction.addToRolePolicy(bucketContainerPermissions);
   }
 }
