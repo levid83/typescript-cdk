@@ -3,6 +3,7 @@ import * as lambda from "@aws-cdk/aws-lambda-nodejs";
 import { Runtime } from "@aws-cdk/aws-lambda";
 import * as s3 from "@aws-cdk/aws-s3";
 import * as path from "path";
+import * as iam from "@aws-cdk/aws-iam";
 
 interface DocumentManagementAPIProps {
   documentBucket: s3.IBucket;
