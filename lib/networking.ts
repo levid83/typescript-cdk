@@ -1,12 +1,13 @@
 import * as cdk from "@aws-cdk/core";
 import * as ec2 from "@aws-cdk/aws-ec2";
 
-export interface NetworkingProps {
+interface NetworkingProps {
   maxAzs: number;
 }
 
 export class Networking extends cdk.Construct {
   public readonly vpc: ec2.IVpc;
+
   constructor(scope: cdk.Construct, id: string, props: NetworkingProps) {
     super(scope, id);
 

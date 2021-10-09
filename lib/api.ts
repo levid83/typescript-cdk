@@ -4,7 +4,7 @@ import { Runtime } from "@aws-cdk/aws-lambda";
 import * as s3 from "@aws-cdk/aws-s3";
 import * as path from "path";
 import * as iam from "@aws-cdk/aws-iam";
-import * as apiGateway from "@aws-cdk/aws-apigatewayv2";
+import * as apig from "@aws-cdk/aws-apigatewayv2";
 
 import { LambdaProxyIntegration } from "@aws-cdk/aws-apigatewayv2-integrations";
 
@@ -13,6 +13,8 @@ interface DocumentManagementAPIProps {
 }
 
 export class DocumentManagementAPI extends cdk.Construct {
+  public readonly httpApi: apig.HttpApi;
+
   constructor(
     scope: cdk.Construct,
     id: string,
@@ -43,11 +45,11 @@ export class DocumentManagementAPI extends cdk.Construct {
     bucketContainerPermissions.addActions("s3:ListBucket");
     getDocumentsFunction.addToRolePolicy(bucketContainerPermissions);
 
-    const httpApi = new apiGateway.HttpApi(this, "HttpAPI", {
+    this.httpApi = new apig.HttpApi(this, "HttpAPI", {
       apiName: "document-management-api",
       createDefaultStage: true,
       corsPreflight: {
-        allowMethods: [apiGateway.CorsHttpMethod.GET],
+        allowMethods: [apig.CorsHttpMethod.GET],
         allowOrigins: ["*"],
         maxAge: cdk.Duration.days(10),
       },
@@ -57,14 +59,14 @@ export class DocumentManagementAPI extends cdk.Construct {
       handler: getDocumentsFunction,
     });
 
-    httpApi.addRoutes({
+    this.httpApi.addRoutes({
       path: "/getDocuments",
-      methods: [apiGateway.HttpMethod.GET],
+      methods: [apig.HttpMethod.GET],
       integration: integration,
     });
 
     new cdk.CfnOutput(this, "APIEndpoint", {
-      value: httpApi.url!,
+      value: this.httpApi.url!,
       exportName: "APIEndpoint",
     });
   }

@@ -5,8 +5,8 @@
   "main": "",
   "scripts": {
     "build:ts": "tsc",
-    "docker:build": "docker build -t dtuckernet/poc-webserver .",
-    "docker:run": "docker run -p 8080:8080 -e SERVER_PORT=8080 -e API_BASE=https://hyliksq0bl.execute-api.us-east-1.amazonaws.com/ -d dtuckernet/poc-webserver"
+    "docker:build": "docker build -t levi1983/cdk-poc-webserver .",
+    "docker:run": "docker run -p 8080:8080 -e SERVER_PORT=8080 -d levi1983/cdk-poc-webserver"
   },
   "author": "",
   "license": "ISC",
